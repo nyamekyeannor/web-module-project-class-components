@@ -21,6 +21,47 @@ class App extends React.Component {
     };
   }
 
+  handleAdd = (task) => {
+    const newTodo = {
+      task: task,
+      id: Date.now(),
+      completed: false
+    };
+
+    this.setState({
+      ...this.State,
+      todos: [...this.state.todos, newTodo]
+    });
+  }
+
+
+  handleClear = () => {
+    this.state({
+      ...this.state,
+      todos: this.state.todos.filter(todos => {
+        return (todos.completed === false);
+      })
+    });
+
+  }
+
+  handleToggle = (clickedId) => {
+
+    this.setState({
+      ...this.state,
+      todos: this.state.todos.map(todo=> {
+        if (todo.id === clickedId) {
+          return {
+            ...todo,
+            completed: !todo.completed
+          }
+
+        }
+          return todo;
+        })
+    });
+  }
+
 
   render() {
     const { todos } = this.state;
@@ -29,10 +70,9 @@ class App extends React.Component {
       <div>
         <h1>Todos</h1>
 
-        <TodoList todos={todos}/>
-        <TodoForm /> 
-
-        <button>Clear</button>
+        <TodoList handleToggle={this.handleToggle} todos={todos}/>
+        <TodoForm handleAdd= {this.handleAdd}/> 
+        <button onClick={this.handleClear}>Clear</button>
       </div>
     );
   }
